@@ -1,0 +1,32 @@
+%function Price= intrument(BKTree)
+%CouponRate = [0.04;0.05;0.001;0.009;0.8;0.002];
+%Holdings = [1500 ;58;850;400;2000;500];
+Settle = datenum('01 Jan 2010');
+filename ='Portfolio.xlsx';
+T = readtable(filename);
+headings = T.Properties.VariableNames(1:end)';
+CouponRate = xlsread(filename,'A:A');
+Holdings = xlsread(filename,'B:B');
+terms = xlsread(filename,'C:C');
+Names=[];
+Maturity=[];
+for idx=1:length(terms)
+      Names= 'Bond'+int2str(terms(idx,1))
+      Maturity = [Maturity;round(datenum(year(Settle)+ terms(idx,1),month(Settle),day(Settle)))];
+end
+t1=datedisp( Maturity);
+
+
+%Names = {'Bond 1'; 'Bond 2'; 'Bond 3'; 'Bond 4' ; 'Bond 5'; 'Bond 6'};
+
+%Maturity = {'01 Jan 2011';'01 Jan 2012';'01 Jan 2013';'01 Jan 2014';'01 Jan 2015';'01 Jan 2017'};
+%Period = 1;
+
+
+%InstSet = instadd('Bond', CouponRate, Settle,  Maturity, Period);
+%InstSet = instsetfield(InstSet, 'Index',1:6, 'FieldName', {'Quantity'}, 'Data', Holdings );
+%InstSet = instsetfield(InstSet, 'Index',1:6, 'FieldName', {'Name'}, 'Data', Names );
+%instdisp(InstSet);
+%[Price, PTree] = bkprice(BKTree, InstSet);
+%assetallocation=
+

@@ -1,0 +1,50 @@
+close all;
+clear variables;
+clc;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+filename ='data.xlsx';
+T = readtable(filename);
+headings = T.Properties.VariableNames(1:end)';
+terms = xlsread(filename,'B:B');
+Startdate = datenum('Jan-01-2006');
+Rate = xlsread(filename,'D:D');
+
+  EndDates = [];
+for idx=1:length(terms)
+      EndDates = [EndDates;round(datenum(year(Startdate)+ terms(idx,1),month(Startdate),day(Startdate)))];
+end
+t1=datedisp(EndDates);
+BKTree=tree(Startdate,EndDates,Rate);
+BKTreeR = cvtree(BKTree);
+%f = figure;
+%t = uitable(f,'Position',terms);
+f = figure;
+tabgp = uitabgroup(f); % Define tab group
+tab1 = uitab(tabgp,'Title','Rates');
+columnname = {'Symbols','Terms','Start date','Rate'};
+columnformat = {'numeric','numeric'};
+% Define the data as a cell array
+data = table2cell(T);
+uit = uitable(tab1, 'Data', data,... 
+            'ColumnName', columnname,...
+            'ColumnFormat', columnformat,...
+            'RowName',[]);
+uit.Position(3) = 320; % Widght
+uit.Position(4) = 350; % Height
+columnname = {'End dates'};
+columnformat = {'char'};
+% Define the data as a cell array
+tab2 = uitab(tabgp,'Title','End dates');
+data1 = table2cell(table(t1));
+uit1 = uitable(tab2, 'Data', data1,... 
+            'ColumnName', columnname,...
+            'ColumnFormat', columnformat,...
+            'RowName',[]);
+uit1.Position(3) = 350; % Widght
+uit1.Position(4) = 350; % Height
+treeviewer(BKTreeR);
+
+Price= intrument(BKTree);
+
+%f = msgbox(sprintf('Prices of the bonds = %f \n',Price ));
